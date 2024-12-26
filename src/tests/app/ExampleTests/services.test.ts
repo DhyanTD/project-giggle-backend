@@ -1,7 +1,7 @@
 import { Database, ErrorCode } from "@smoke-trees/postgres-backend";
 import { assert } from "chai";
-import { UserService } from "../../../app/users";
 import { clearUserTable } from "../../utils/clear-database.test";
+import { UserService } from "../../../app/users/user.service";
 
 export function ExampleServiceTest(
   database: Database,

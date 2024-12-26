@@ -1,8 +1,8 @@
 import { Database } from "@smoke-trees/postgres-backend";
 import "./config";
-import { User } from "./app/users";
 import settings from "./settings";
 import { Address } from "./app/address/Address.entity";
+import { User } from "./app/users/user.entity";
 
 const database = new Database(settings);
 

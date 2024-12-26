@@ -15,7 +15,7 @@ export class ApplicationSettings extends Settings {
     this.dbUser = this.getValue("PGUSER", "postgres");
     this.dbHost = this.getValue("PGHOST", "localhost");
     this.dbPort = this.getValue("PGPORT", "5432");
-    this.database = this.getValue("PGDATABASE", "postgres");
+    this.database = this.getValue("PGDATABASE", "projectsDB");
     super();
   }
 }

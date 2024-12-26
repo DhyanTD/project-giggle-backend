@@ -1,6 +1,16 @@
 export interface IUser {
-  id?: number;
+  id: string;
   name: string;
-  lastName?: string | null;
-  dateOfBirth: Date | null;
+  email: string;
+  phone?: string;
+  password: string;
+  type: UserType;
+  emailVerified:boolean;
+  course?:string;
+}
+
+
+export enum UserType{
+  admin = "admin",
+  puser = "puser" 
 }

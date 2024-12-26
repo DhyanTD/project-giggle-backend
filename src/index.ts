@@ -1,6 +1,5 @@
 import { Application, Documentation } from "@smoke-trees/postgres-backend";
 import database from "./database";
-import { UserController, UserDao, UserService } from "./app/users";
 import settings from "./settings";
 import swaggerUiExpress from "swagger-ui-express";
 import cors from "cors";
@@ -8,6 +7,9 @@ import { json } from "express";
 import { AddressDao } from "./app/address/Address.dao";
 import { AddressService } from "./app/address/Address.service";
 import { AddressController } from "./app/address/Address.controller";
+import { UserDao } from "./app/users/user.dao";
+import { UserService } from "./app/users/user.service";
+import { UserController } from "./app/users/user.controller";
 
 const app = new Application(settings, database);
 

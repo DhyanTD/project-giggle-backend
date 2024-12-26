@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "../users";
+import { User } from "../users/user.entity";
 
 export interface IAddress {
   userId: number;
