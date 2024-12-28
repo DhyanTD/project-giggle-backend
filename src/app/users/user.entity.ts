@@ -2,7 +2,7 @@ import {
   BaseEntity,
   Documentation,
 } from "@smoke-trees/postgres-backend";
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { IUser, UserType } from "./IUser";
 
 @Entity({ name: "user" })

@@ -10,6 +10,9 @@ import { AddressController } from "./app/address/Address.controller";
 import { UserDao } from "./app/users/user.dao";
 import { UserService } from "./app/users/user.service";
 import { UserController } from "./app/users/user.controller";
+import { CategoryTagsDao } from "./app/categoryTags/categoryTags.dao";
+import { CategoryTagsService } from "./app/categoryTags/categoryTags.service";
+import { CategoryTagsController } from "./app/categoryTags/categoryTags.controller";
 
 const app = new Application(settings, database);
 
@@ -21,11 +24,16 @@ const addressDao = new AddressDao(database);
 const addressService = new AddressService(addressDao);
 const addressController = new AddressController(app, addressService);
 
+const categoryTagsDao = new CategoryTagsDao(database);
+const categoryTagsService = new CategoryTagsService(categoryTagsDao);
+const categoryTagsController = new CategoryTagsController(app, categoryTagsService);
+
 app.addMiddleWare(cors());
 app.addMiddleWare(json());
 
 app.addController(userController);
 app.addController(addressController);
+app.addController(categoryTagsController);
 
 Documentation.addServers([
   {
