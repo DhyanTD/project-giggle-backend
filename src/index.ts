@@ -19,6 +19,10 @@ import { OrdersController } from "./app/orders/orders.controller";
 import { ContextProvider } from "@smoke-trees/smoke-context";
 import { Request } from "express";
 import bodyParser from "body-parser";
+import { AuthMiddleware } from "./middlware/authMiddleware";
+import { ProductDao } from "./app/product/product.dao";
+import { ProductService } from "./app/product/product.service";
+import { ProductController } from "./app/product/product.controller";
 
 const app = new Application(settings, database);
 
@@ -34,9 +38,19 @@ const categoryTagsDao = new CategoryTagsDao(database);
 const categoryTagsService = new CategoryTagsService(categoryTagsDao);
 const categoryTagsController = new CategoryTagsController(app, categoryTagsService);
 
+const productDao = new ProductDao(database);
+const productService = new ProductService(productDao);
+const productController = new ProductController(app, productService);
+
+
+const authMiddleware = new AuthMiddleware(userDao, productDao);
+
+
 const ordersDao = new OrdersDao(database);
-const ordersService = new OrdersService(ordersDao);
-const ordersController = new OrdersController(app, ordersService);
+const ordersService = new OrdersService(ordersDao, productDao);
+const ordersController = new OrdersController(app, ordersService, authMiddleware);
+
+
 
 app.addMiddleWare(cors());
 app.addMiddleWare(morgan);
@@ -45,6 +59,7 @@ app.addController(userController);
 app.addController(addressController);
 app.addController(categoryTagsController);
 app.addController(ordersController);
+app.addController(productController);
 
 app.addMiddleWare((req: Request, res, next) => {
   if (req.originalUrl === "/order/stripeWebhook") {

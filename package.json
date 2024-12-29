@@ -53,6 +53,7 @@
     "pg": "^8.11.3",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "0.3.20",
+    "uuid": "^11.0.3",
     "winston": "^3.12.0",
     "yamljs": "^0.3.0"
   },
