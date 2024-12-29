@@ -7,6 +7,9 @@ export class ApplicationSettings extends Settings {
   dbHost: string;
   dbPort: string | undefined;
   database: string;
+  jwtSecret: string;
+  jwtTokenExpiry: number;
+  jwtRefreshExpiry: number;
 
   constructor() {
     super();
@@ -16,7 +19,9 @@ export class ApplicationSettings extends Settings {
     this.dbHost = this.getValue("PGHOST", "localhost");
     this.dbPort = this.getValue("PGPORT", "5432");
     this.database = this.getValue("PGDATABASE", "projectsDB");
-    super();
+    this.jwtSecret = this.getValue("JWT_SECRET", "broitissupposedtobesecret");
+    this.jwtTokenExpiry = parseInt(this.getValue("JWT_TOKEN_EXPIRY", "3600"));
+    this.jwtRefreshExpiry = parseInt(this.getValue("JWT_REFRESH_EXPIRY", "86400"));
   }
 }
 

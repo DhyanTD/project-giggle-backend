@@ -1,9 +1,9 @@
-import { Application, Documentation } from "@smoke-trees/postgres-backend";
+import { Application, Documentation, morgan } from "@smoke-trees/postgres-backend";
 import database from "./database";
 import settings from "./settings";
 import swaggerUiExpress from "swagger-ui-express";
 import cors from "cors";
-import { json } from "express";
+import jwt from "jsonwebtoken";
 import { AddressDao } from "./app/address/Address.dao";
 import { AddressService } from "./app/address/Address.service";
 import { AddressController } from "./app/address/Address.controller";
@@ -13,6 +13,12 @@ import { UserController } from "./app/users/user.controller";
 import { CategoryTagsDao } from "./app/categoryTags/categoryTags.dao";
 import { CategoryTagsService } from "./app/categoryTags/categoryTags.service";
 import { CategoryTagsController } from "./app/categoryTags/categoryTags.controller";
+import { OrdersDao } from "./app/orders/orders.dao";
+import { OrdersService } from "./app/orders/orders.service";
+import { OrdersController } from "./app/orders/orders.controller";
+import { ContextProvider } from "@smoke-trees/smoke-context";
+import { Request } from "express";
+import bodyParser from "body-parser";
 
 const app = new Application(settings, database);
 
@@ -28,12 +34,39 @@ const categoryTagsDao = new CategoryTagsDao(database);
 const categoryTagsService = new CategoryTagsService(categoryTagsDao);
 const categoryTagsController = new CategoryTagsController(app, categoryTagsService);
 
+const ordersDao = new OrdersDao(database);
+const ordersService = new OrdersService(ordersDao);
+const ordersController = new OrdersController(app, ordersService);
+
 app.addMiddleWare(cors());
-app.addMiddleWare(json());
+app.addMiddleWare(morgan);
 
 app.addController(userController);
 app.addController(addressController);
 app.addController(categoryTagsController);
+app.addController(ordersController);
+
+app.addMiddleWare((req: Request, res, next) => {
+  if (req.originalUrl === "/order/stripeWebhook") {
+    bodyParser.text({ type: "application/json" })(req, res, next);
+  } else {
+    bodyParser.json()(req, res, next);
+  }
+});
+
+app.addMiddleWare(
+  ContextProvider.getMiddleware({
+    extractKeyValuePairs: (req?: Request) => {
+      if (!req) return {};
+      const token = req.headers.authorization?.split(" ")[1];
+      if (!token) return {};
+      const claims = jwt.decode(token);
+      if (!claims || typeof claims === "string") return {};
+      const values = { token, ...claims } as any;
+      return values;
+    },
+  })
+);
 
 Documentation.addServers([
   {
